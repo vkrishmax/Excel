@@ -1,0 +1,299 @@
+Write Excel File In Java Using Apache POI
+
+Apache POI is a powerful Java library to work with different Microsoft Office file formats such as Excel, Power point, Visio, MS Word etc.In this tutorial we will use Apache POI library to create an Excel spreadsheet with the content below. 
+
+TestId,TestName,TestModule,TestType,TestSteps,Action,TestResult,Note
+1,Login,Dashboard,Regression,1,Open Browser,Browser Should Open,This is a note
+Create a Java maven-based project and add the following Apache POI dependency in the pom.xml file.
+
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi</artifactId>
+    <version>3.12</version>
+</dependency>
+Write the following code in the class "CreateExcelFileWithJavaPOI.java".
+
+package com.example.excel;
+
+import jxl.write.WriteException;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+public class CreateExcelFileWithJavaPOI {
+    public static void main(String[] args) throws WriteException {
+        try {
+            //define a workbook
+            Workbook wb = new HSSFWorkbook();
+            //define output file
+            FileOutputStream fileOut = new FileOutputStream("workbook.xls");
+            //add a sheet to the workbook
+            Sheet sheet = wb.createSheet("TestCases");
+            // Create a row and put some cells in it. Rows are 0 based.
+            //define first row
+            Row row0 = sheet.createRow((short)0);
+            // Create a cell and put a value in it.
+            Cell cell = row0.createCell(0);
+            cell.setCellValue("TestId");
+            //add more cells and values
+            row0.createCell(1).setCellValue("TestName");
+            row0.createCell(2).setCellValue("TestModule");
+            row0.createCell(3).setCellValue("TestType");
+            row0.createCell(4).setCellValue("TestSteps");
+            row0.createCell(5).setCellValue("Action");
+            row0.createCell(6).setCellValue("TestResult");
+            row0.createCell(7).setCellValue("Note");
+            //add row 1 content
+            Row row1=sheet.createRow((short)1);
+            row1.createCell(0).setCellValue("1");
+            row1.createCell(1).setCellValue("Login");
+            row1.createCell(2).setCellValue("Dashboard");
+            row1.createCell(3).setCellValue("Regression");
+            row1.createCell(4).setCellValue("1");
+            row1.createCell(5).setCellValue("Open Browser");
+            row1.createCell(6).setCellValue("Browser Should Open");
+            row1.createCell(7).setCellValue("This is a note");
+            // All sheets and cells added. Now write out the workbook
+            wb.write(fileOut);
+            fileOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+Run the above code and see the result. An excel file "workbook.xls" is created with the content below.
+
+TestId,TestName,TestModule,TestType,TestSteps,Action,TestResult,Note
+1,Login,Dashboard,Regression,1,Open Browser,Browser Should Open,This is a note
+Email
+Print
+Read Excel File In Java Using Apache POI
+
+Apache POI is a powerful Java library to work with different Microsoft Office file formats such as Excel, Power point, Visio, MS Word etc.In this tutorial we will use Apache POI library to read an Excel spreadsheet. We will read the excel file "workbook.xls" we created in the article "Write Excel File In Java Using Apache POI".  
+
+Create a Java maven-based project and add the following Apache POI dependency in the pom.xml file.
+
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi</artifactId>
+    <version>3.12</version>
+</dependency>
+Write the following code in the class "ReadExcelFileWithJavaPOI.java".
+
+package com.example.excel;
+
+import jxl.write.WriteException;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+
+import javax.swing.text.html.HTMLDocument;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Iterator;
+
+public class ReadExcelFileWithJavaPOI {
+    public static void main(String[] args) throws WriteException {
+        try {
+            //Open an excel file as input stream
+            FileInputStream fileInputStream=new FileInputStream(new File("workbook.xls"));
+            //Get the workbook instance for XLS file
+            //define a workbook
+            HSSFWorkbook hssfWorkbook=new HSSFWorkbook(fileInputStream);
+            //Get first sheet from the workbook
+            HSSFSheet sheet=hssfWorkbook.getSheetAt(0);
+            //Get iterator to all the rows in the current sheet
+            Iterator rowIterator=sheet.iterator();
+            while (rowIterator.hasNext())
+            {
+                Row row=rowIterator.next();
+                System.out.println("Row Number  "+row.getRowNum());
+                //For each row, iterate through each columns
+                Iterator cellIterator=row.cellIterator();
+                while (cellIterator.hasNext())
+                {
+                    Cell cell=cellIterator.next();
+                    System.out.print(cell.getStringCellValue() + ",");
+                }
+                System.out.println("");
+            }
+
+            fileInputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+Run the above code and see the result. The content of the excel file "workbook.xls" is displayed as below.
+
+Row Number  0
+TestId,TestName,TestModule,TestType,TestSteps,Action,TestResult,Note,
+Row Number  1
+1,Login,Dashboard,Regression,1,Open Browser,Browser Should Open,This is a note,
+Email
+Print
+Create Excel File In Java
+
+Java Excel API is a mature, open source java API enabling developers to read, write, and modifiy Excel spreadsheets dynamically. Here we explain how to create an excel file using jxl library. You create a maven based project and add jxl library dependency in the pom.xml file. 
+
+<dependency>
+	<groupId>net.sourceforge.jexcelapi</groupId>
+	<artifactId>jxl</artifactId>
+	<version>2.6.12</version>
+</dependency>
+Write the following code in the java class file "CreateExcelFile.java".
+
+package com.example.excel;
+
+import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.Number;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+
+import java.io.File;
+import java.io.IOException;
+
+public class CreateExcelFile {
+    public static void main(String[] args) throws WriteException {
+        try {
+            //create a new workbook to write
+            WritableWorkbook workbook = Workbook.createWorkbook(new File("output.xls"));
+            //add a new sheet to the work book
+            WritableSheet sheet = workbook.createSheet("TestCases", 0);
+            //add test Id to col 0 row 0
+            Label testId = new Label(0, 0, "TestId");
+            //add test name to col 1 row 0
+            Label testName = new Label(1, 0, "TestName");
+            //add test module to col 2 row 0
+            Label testModule = new Label(2, 0, "TestModule");
+            //add test type to col 3 row 0
+            Label testType = new Label(3, 0, "TestType");
+            //add test steps to col 4 row 0
+            Label testSteps = new Label(4, 0, "TestSteps");
+            //add test actions to col 5 row 0
+            Label testActions = new Label(5, 0, "Action");
+            //add test result to col 6 row 0
+            Label testResult = new Label(5, 0, "TestResult");
+            //add test note to col 7 row 0
+            Label testNote = new Label(6, 0, "Note");
+            //add to the cells
+            sheet.addCell(testId);
+            sheet.addCell(testName);
+            sheet.addCell(testModule);
+            sheet.addCell(testType);
+            sheet.addCell(testSteps);
+            sheet.addCell(testActions);
+            sheet.addCell(testResult);
+            sheet.addCell(testNote);
+            //define row 1 content
+            Number testIdNumber = new Number(0, 1, 1234);
+            Label testNameContent=new Label(1,1,"Login");
+            Label testModuleContent=new Label(2,1,"Dashboard");
+            Label testTypeContent=new Label(3,1,"Regression");
+            Label testStepsContent=new Label(4,1,"1");
+            Label testActionContent=new Label(5,1,"Open Browser");
+            Label testResultContent=new Label(6,1,"");
+            Label testNoteContent=new Label(7,1,"");
+            //add row 1 content
+            sheet.addCell(testIdNumber);
+            sheet.addCell(testNameContent);
+            sheet.addCell(testModuleContent);
+            sheet.addCell(testTypeContent);
+            sheet.addCell(testStepsContent);
+            sheet.addCell(testActionContent);
+            sheet.addCell(testResultContent);
+            sheet.addCell(testNoteContent);
+            // All sheets and cells added. Now write out the workbook
+            workbook.write();
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+Run the code above. An excel file "output.xls" is created with the following content. 
+
+TestId	TestName	TestModule	TestType	TestSteps	TestResult	Note
+1234	Login		Dashboard	Regression	1				Open Browser
+Email
+Print
+Read Excel File In Java
+
+Java Excel API is a mature, open source java API enabling developers to read, write, and modifiy Excel spreadsheets dynamically. Here we explain how to read an excel file using jxl library. You create a maven based project and add jxl library dependency in the pom.xml file. 
+
+<dependency>
+	<groupId>net.sourceforge.jexcelapi</groupId>
+	<artifactId>jxl</artifactId>
+	<version>2.6.12</version>
+</dependency>
+Write the following code in the java class file "ReadExcelFile.java".
+
+package com.example.excel;
+
+import jxl.*;
+import jxl.read.biff.BiffException;
+import jxl.write.*;
+
+import java.io.File;
+import java.io.IOException;
+
+public class ReadExcelFile {
+    public static void main(String[] args) throws WriteException {
+        try {
+            //define workbook
+            Workbook workbook = null;
+            try {
+                //initialize work book to read
+                workbook = Workbook.getWorkbook(new File("output.xls"));
+            } catch (BiffException e) {
+                e.printStackTrace();
+            }
+            //get first sheet
+            Sheet sheet = workbook.getSheet(0);
+            //print first sheet name
+            String sheetName=sheet.getName();
+            System.out.println("Sheet name :"+sheetName);
+            //define cell string or number variable
+            String cellString = null;
+            double cellNumber = 0;
+            //loop through each cell and read content
+            for(int row=0;row<2;row++) {
+                for (int col = 0; col < 7; col++) {
+                    Cell cell = sheet.getCell(col, row);
+                    if (cell.getType() == CellType.LABEL) {
+                        cellString = cell.getContents();
+                        System.out.print(cellString + " ,");
+                    } else if (cell.getType() == CellType.NUMBER) {
+                        NumberCell nc = (NumberCell) cell;
+                        cellNumber = nc.getValue();
+                        System.out.print(cellNumber + " ,");
+                    }
+
+                }
+                //start new line for new row
+                System.out.println();
+            }
+            //close work book
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+Run the code above. An excel file "output.xls" is created with the following content. 
+
+Sheet name :TestCases
+TestId ,TestName ,TestModule ,TestType ,TestSteps ,TestResult ,Note ,
+1234.0 ,Login ,Dashboard ,Regression ,1 ,Open Browser , ,
